@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Productos from './pages/Productos';
+import AuthLogin from './pages/authLogin';
 
 const Dashboard = () => (
   <div>
@@ -12,16 +13,13 @@ const Dashboard = () => (
 function App() {
   return (
     <BrowserRouter>
-      {/* El Layout envuelve todas las rutas */}
-      <Layout>
-        <Routes>
-          {/* Redireccionar raíz a dashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/productos" element={<Productos />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route path="/" element={<AuthLogin />} />
+        <Route path="/login" element={<AuthLogin />} />
+
+        <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+        <Route path="/productos" element={<Layout><Productos /></Layout>} />
+      </Routes>
     </BrowserRouter>
   );
 }

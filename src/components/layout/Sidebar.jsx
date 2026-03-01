@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, ShoppingBag, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, LogOut } from 'lucide-react';
 
 const Sidebar = () => {
   const linkClass = ({ isActive }) =>
