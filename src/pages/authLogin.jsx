@@ -11,8 +11,13 @@ function AuthLogin() {
     setError('');
     try {
       const data = await api.post('/api/auth/login', { email, password });
-      localStorage.setItem('token', data.token);
-      window.location.href = '/dashboard';
+      console.log('Respuesta del servidor:', data);
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        window.location.href = '/dashboard';
+      } else {
+        setError('No se recibió un token válido del servidor.');
+      }
     } catch (err) {
       setError('Correo o contraseña incorrectos.');
     }

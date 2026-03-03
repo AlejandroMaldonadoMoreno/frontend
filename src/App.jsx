@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Productos from './pages/Productos';
 import AuthLogin from './pages/authLogin';
+import ProtectedRoute from "./components/layout/protectedRoute.jsx";
 
 const Dashboard = () => (
   <div>
@@ -14,11 +15,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AuthLogin />} />
+
         <Route path="/login" element={<AuthLogin />} />
 
-        <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
-        <Route path="/productos" element={<Layout><Productos /></Layout>} />
+        <Route path="/" element={<ProtectedRoute />}>
+          <Route path="dashboard" element={<Layout><Dashboard /></Layout>} />
+          <Route path="productos" element={<Layout><Productos /></Layout>} />
+        </Route>
+
       </Routes>
     </BrowserRouter>
   );
