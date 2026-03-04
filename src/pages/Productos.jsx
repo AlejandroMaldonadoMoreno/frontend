@@ -3,7 +3,7 @@ import { api } from "../services/api";
 
 function Productos() {
     const [productos, setProductos] = useState([]);
-    const [form, setForm] = useState({ nombre: "", precio: "" });
+    const [form, setForm] = useState({ nombre: "", precio: "", stock: "", imagen_url: "" });
 
     const cargarProductos = () => {
         api.get("/api/productos")
@@ -28,16 +28,18 @@ function Productos() {
                     await api.post("/api/productos", {
                         nombre: form.nombre,
                         precio: parseFloat(form.precio),
-                        stock: 0,
-                        imagen_url: null,
+                        stock: parseInt(form.stock),
+                        imagen_url: form.imagen_url || null,
                         id_categoria: 1,
                     });
-                    setForm({ nombre: "", precio: "" });
+                    setForm({ nombre: "", precio: "", stock: "", imagen_url: "" });
                     cargarProductos();
                 }}
             >
                 <input name="nombre" type="text" placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ form, nombre: e.target.value })} required className="border rounded px-3 py-2 text-sm flex-1" />
                 <input name="precio" type="number" placeholder="Precio" value={form.precio} onChange={(e) => setForm({ form, precio: e.target.value })} required min="0" step="0.01" className="border rounded px-3 py-2 text-sm w-28" />
+                <input name="stock" type="number" placeholder="Stock" value={form.stock} onChange={(e) => setForm({ form, stock: e.target.value })} required min="0" className="border rounded px-3 py-2 text-sm w-24" />
+                <input name="imagen_url" type="text" placeholder="URL Imagen" value={form.imagen_url} onChange={(e) => setForm({ form, imagen_url: e.target.value })} className="border rounded px-3 py-2 text-sm w-48" />
                 <button type="submit" className="bg-blue-600 text-white text-sm px-4 py-2 rounded">Agregar</button>
             </form>
 
