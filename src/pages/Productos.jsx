@@ -3,15 +3,16 @@ import { api } from "../services/api";
 
 function Productos() {
     const [productos, setProductos] = useState([]);
+    const [form, setForm] = useState({ nombre: "", precio: "" });
+
+    const cargarProductos = () => {
+        api.get("/api/productos")
+            .then((data) => setProductos(data))
+            .catch((error) => console.error("Error:", error));
+    };
 
     useEffect(() => {
-        api.get("/api/productos")
-            .then((data) => {
-                setProductos(data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+        cargarProductos();
     }, []);
 
     return (
@@ -19,6 +20,26 @@ function Productos() {
             <h1 className="text-2xl font-bold mb-6 text-gray-800">
                 Lista de Productos
             </h1>
+
+            <form
+                className="mb-6 flex gap-2 bg-white p-4 rounded-lg shadow-sm"
+                onSubmit={async (e) => {
+                    e.preventDefault();
+                    await api.post("/api/productos", {
+                        nombre: form.nombre,
+                        precio: parseFloat(form.precio),
+                        stock: 0,
+                        imagen_url: null,
+                        id_categoria: 1,
+                    });
+                    setForm({ nombre: "", precio: "" });
+                    cargarProductos();
+                }}
+            >
+                <input name="nombre" type="text" placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ form, nombre: e.target.value })} required className="border rounded px-3 py-2 text-sm flex-1" />
+                <input name="precio" type="number" placeholder="Precio" value={form.precio} onChange={(e) => setForm({ form, precio: e.target.value })} required min="0" step="0.01" className="border rounded px-3 py-2 text-sm w-28" />
+                <button type="submit" className="bg-blue-600 text-white text-sm px-4 py-2 rounded">Agregar</button>
+            </form>
 
             <div className="space-y-4">
                 {productos.map((producto) => (
