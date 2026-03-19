@@ -3,7 +3,7 @@ import { api } from "../services/api";
 
 function Productos() {
     const [productos, setProductos] = useState([]);
-    const [form, setForm] = useState({ nombre: "", precio: "", stock: "", imagen_url: "" });
+    const [form, setForm] = useState({ nombre: "", precio: "", stock: "", imagen_url: "", youtube_id: "" });
 
     const cargarProductos = () => {
         api.get("/api/productos")
@@ -30,16 +30,18 @@ function Productos() {
                         precio: parseFloat(form.precio),
                         stock: parseInt(form.stock),
                         imagen_url: form.imagen_url || null,
-                        id_categoria: 1,
+                        id_categoria: null,
+                        youtube_id: form.youtube_id || null
                     });
-                    setForm({ nombre: "", precio: "", stock: "", imagen_url: "" });
+                    setForm({ nombre: "", precio: "", stock: "", imagen_url: "", youtube_id: "" });
                     cargarProductos();
                 }}
             >
-                <input name="nombre" type="text" placeholder="Nombre" value={form.nombre} onChange={(e) => setForm({ form, nombre: e.target.value })} required className="border rounded px-3 py-2 text-sm flex-1" />
-                <input name="precio" type="number" placeholder="Precio" value={form.precio} onChange={(e) => setForm({ form, precio: e.target.value })} required min="0" step="0.01" className="border rounded px-3 py-2 text-sm w-28" />
-                <input name="stock" type="number" placeholder="Stock" value={form.stock} onChange={(e) => setForm({ form, stock: e.target.value })} required min="0" className="border rounded px-3 py-2 text-sm w-24" />
-                <input name="imagen_url" type="text" placeholder="URL Imagen" value={form.imagen_url} onChange={(e) => setForm({ form, imagen_url: e.target.value })} className="border rounded px-3 py-2 text-sm w-48" />
+                <input name="nombre" type="text" placeholder="Nombre_producto" value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })} required className="border rounded px-3 py-2 text-sm flex-1" />
+                <input name="precio" type="number" placeholder="Precio_producto" value={form.precio} onChange={(e) => setForm({ ...form, precio: e.target.value })} required min="0" step="0.01" className="border rounded px-3 py-2 text-sm w-28" />
+                <input name="stock" type="number" placeholder="Stock_disponible" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} required min="0" className="border rounded px-3 py-2 text-sm w-24" />
+                <input name="imagen_url" type="text" placeholder="URL_Imagen" value={form.imagen_url} onChange={(e) => setForm({ ...form, imagen_url: e.target.value })} className="border rounded px-3 py-2 text-sm w-48" />
+                <input name="youtube_id" type="text" placeholder="YouTube_ID" value={form.youtube_id} onChange={(e) => setForm({ ...form, youtube_id: e.target.value })} className="border rounded px-3 py-2 text-sm w-40" />
                 <button type="submit" className="bg-blue-600 text-white text-sm px-4 py-2 rounded">Agregar</button>
             </form>
 
@@ -58,6 +60,27 @@ function Productos() {
                         <p className="text-gray-600">
                             Stock: {producto.stock}
                         </p>
+
+                        <div className="mt-3">
+                            {producto.youtube_id ? (
+                                <iframe
+                                    className="w-full max-w-xl aspect-video rounded"
+                                    src={`https://www.youtube.com/embed/${producto.youtube_id}`}
+                                    title={`YouTube video ${producto.youtube_id}`}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    allowFullScreen
+                                />
+                            ) : producto.imagen_url ? (
+                                <img
+                                    className="w-full max-w-xl rounded object-cover"
+                                    src={producto.imagen_url}
+                                    alt={producto.nombre}
+                                    loading="lazy"
+                                />
+                            ) : null}
+                        </div>
                     </div>
                 ))}
             </div>
